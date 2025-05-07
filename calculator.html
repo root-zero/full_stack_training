@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-200">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+        <input type="text" id="display" class="w-full h-12 text-right text-xl border border-gray-300 rounded mb-4" disabled>
+        <div class="grid grid-cols-4 gap-2">
+            <button class="bg-blue-500 text-white p-3 rounded" onclick="appendNumber('7')">7</button>
+            <button class="bg-blue-500 text-white p-3 rounded" onclick="appendNumber('8')">8</button>
+            <button class="bg-blue-500 text-white p-3 rounded" onclick="appendNumber('9')">9</button>
+            <button class="bg-purple-500 text-white p-3 rounded" onclick="appendOperation('/')">/</button>
+            <button class="bg-blue-500 text-white p-3 rounded" onclick="appendNumber('4')">4</button>
+            <button class="bg-blue-500 text-white p-3 rounded" onclick="appendNumber('5')">5</button>
+            <button class="bg-blue-500 text-white p-3 rounded" onclick="appendNumber('6')">6</button>
+            <button class="bg-purple-500 text-white p-3 rounded" onclick="appendOperation('*')">*</button>
+            <button class="bg-blue-500 text-white p-3 rounded" onclick="appendNumber('1')">1</button>
+            <button class="bg-blue-500 text-white p-3 rounded" onclick="appendNumber('2')">2</button>
+            <button class="bg-blue-500 text-white p-3 rounded" onclick="appendNumber('3')">3</button>
+            <button class="bg-purple-500 text-white p-3 rounded" onclick="appendOperation('-')">-</button>
+            <button class="bg-blue-500 text-white p-3 rounded" onclick="appendNumber('0')">0</button>
+            <button class="bg-red-500 text-white p-3 rounded" onclick="clearDisplay()">C</button>
+            <button class="bg-green-500 text-white p-3 rounded" onclick="calculate()">=</button>
+            <button class="bg-purple-500 text-white p-3 rounded" onclick="appendOperation('+')">+</button>
+        </div>
+    </div>
+
+    <script>
+        let currentInput = '';
+        let currentOperation = '';
+        let previousInput = '';
+
+        function appendNumber(number) {
+            currentInput += number;
+            //console.log(currentInput);
+            document.getElementById('display').value = currentInput;
+        }
+
+        function appendOperation(operation) {
+            if (currentInput === '') return;
+            if (previousInput !== '') {
+                calculate();
+            }
+            currentOperation = operation;
+            previousInput = currentInput;
+            currentInput = '';
+            //console.log(currentInput);
+            //console.log(previousInput);
+            document.getElementById('display').value = previousInput + ' ' + currentOperation;
+        }
+
+        function calculate() {
+            if (previousInput === '' || currentInput === '') return;
+            let result;
+            let prev = parseFloat(previousInput);
+            let current = parseFloat(currentInput);
+            switch (currentOperation) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    if (current === 0) {
+                        alert("Cannot divide by zero");
+                        return;
+                    }
+                    result = prev / current;
+                    break;
+                default:
+                    return;
+            }
+            currentInput = result.toString();
+            //console.log(currentInput);
+            currentOperation = '';
+            previousInput = '';
+            document.getElementById('display').value = currentInput;
+        }
+
+        function clearDisplay() {
+            currentInput = '';
+            previousInput = '';
+            currentOperation = '';
+            document.getElementById('display').value = '';
+        }
+    </script>
+</body>
+</html>
